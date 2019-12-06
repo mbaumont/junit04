@@ -1,73 +1,58 @@
 package projetPOO01.saisie;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import projetPOO01.Methodes.Achat;
 import projetPOO01.Methodes.Commande;
 
 public class Controles {
 	
-public static Achat rentrerAchat(Scanner sc) {
-		
-		System.out.println("Saisie d'un nouvel achat");
-		System.out.println("----------------------------");
-		System.out.println("Date (format XX/XX/XXXX):");	
-		Date dateOb = new Date();
-		boolean erreursaisie = true;
-		while(erreursaisie) {
-			try {
-				String date = sc.nextLine();		
-				dateOb = Achat.checkDate(date);
-				erreursaisie = false;
-		 	}
-			catch(Exception e) {
-				System.err.println("Mauvais format attention");
-				System.out.println("Date (format XX/XX/XXXX):");
-			}
-		 }
-		System.out.println("Intitul�:");
-		String intitule = sc.nextLine();
-		System.out.println("Quantit�:");
-		String quantite = sc.nextLine();
-		Achat achat = new Achat(dateOb, intitule,quantite);
-		return achat;
-		}
 
+@SuppressWarnings("unchecked")
+public static  <T> T rentrerAchatOuCommande(Scanner sc,String achatOuCommande) {
 	
-	
-	public static Commande rentrerCommande(Scanner sc) {
-		
-		System.out.println("Saisie d'un nouvel achat");
-		System.out.println("----------------------------");
-		System.out.println("Date (format XX/XX/XXXX):");	
-		Date dateOb = new Date();
-		boolean erreursaisie = true;
-		while(erreursaisie) {
-			try {
-				String date = sc.nextLine();		
-				dateOb = Achat.checkDate(date);
-				erreursaisie = false;
-		 	}
-			catch(Exception e) {
-				System.err.println("Mauvais format attention");
-				System.out.println("Date (format XX/XX/XXXX):");
-			}
-		 }
-		System.out.println("Intitul�:");
-		String intitule = sc.nextLine();
-		System.out.println("Quantit�:");
-		String quantite = sc.nextLine();
-		Commande commande = new Commande(dateOb, intitule,quantite);
-		return commande;
+	System.out.println("Saisie d'un nouvel "+achatOuCommande);
+	System.out.println("----------------------------");
+	System.out.println("Date (format XX/XX/XXXX):");	
+	Date dateOb = new Date();
+	boolean erreursaisie = true;
+	while(erreursaisie) {
+		try {
+			String date = sc.nextLine();	
+			dateOb = Achat.checkDate(date);
+			erreursaisie = false;
+	 	}
+		catch(Exception e) {
+			System.err.println("Mauvais format attention");
+			System.out.println("Date (format XX/XX/XXXX):");
 		}
+	 }
+	System.out.println("Intitulé:");
+	String intitule = sc.nextLine();
+	System.out.println("Quantité:");
+	String quantite = sc.nextLine();
+	switch (achatOuCommande) {
+	case("achat"):
+	Achat achat = new Achat(dateOb, intitule,quantite);
+	return (T) achat;
+	
+	case("commande"):
+	Commande commande = new Commande(dateOb, intitule,quantite);
+	return (T) commande;
+	}
+	return null;
+
+	}
 	
 	public static String validateAnswer(String[] listRep,Scanner sc){
 		String element;
 		element = sc.nextLine();
 		while (testReponse(listRep,element)) {
-			System.out.println("Attention votre r�ponse est non valable. Taper parmis les choix suivant: "); 
-			for(String e:listRep) { // faire pour de 0 � l'avant dernier et g�rer le dernier dans un cas apart
+			System.out.println("Attention votre réponse est non valable. Taper parmis les choix suivant: "); 
+			for(String e:listRep) { 
 				if (e.equals("")) {
 					System.out.print("Entrer ");
 				}
@@ -79,12 +64,9 @@ public static Achat rentrerAchat(Scanner sc) {
 	}
 	
 	public static boolean testReponse(String[] listRep, String element){
-		for (String r:listRep) {
-			if (element.equals(r)) {
-				return false;
-			}		
-		}	
-		return true;	
+		Stream<String> streamarray = Stream.of(listRep);
+		return !streamarray.anyMatch(r -> r.equals(element));			
 	}
 
+		
 }

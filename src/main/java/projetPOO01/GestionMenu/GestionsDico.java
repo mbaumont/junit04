@@ -62,6 +62,7 @@ public class GestionsDico {
 			}
 		}
 	}
+
 	public static void initToutesPersonne(Dictionary<EPersonne, String> dico) {
 			boolean erreursaisie;
 			boolean continueornot = true;		

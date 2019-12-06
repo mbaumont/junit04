@@ -5,8 +5,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner;
-
-import projetPOO01.Programme;
+import java.util.stream.Stream;
 import projetPOO01.Enumerations.EPersonne;
 import projetPOO01.GestionMenu.GestionFichiers;
 import projetPOO01.GestionMenu.GestionsDico;
@@ -27,57 +26,6 @@ public class Menu {
 	public static List<Personne> listPersonne = null;
 	public static Boolean Patron = null;
 	
-	public static void afficheMenuAchat(IClient Client, List<Achat> listAchats) {
-		System.out.println("Saisie des achats");
-		System.out.println("----------------------------");
-		
-		System.out.println("Taper 1: Saisie d'un nouvel achat");
-		System.out.println("Taper 2: Achat des articles");
-		System.out.println("Taper 3: Visulaliser les achats");
-		System.out.println("Taper r: Retour");
-		String[] listString = {"1","2","3","r"};		
-		String a = Controles.validateAnswer(listString,sc);
-		switch(a) {
-		case "1": 
-			Affiche.afficheNouvelAchat(Client,listAchats);
-			break;
-		case "2":
-			Client.achete(listAchats);
-			if (!listAchats.isEmpty()) {
-				System.out.println("Achat réalisé avec succés!");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}	
-				
-			}
-			else System.out.println("Attention aucun achat enregistré.");
-			System.out.println("----------------------------");
-			afficheMenuAchat(Client,listAchats);
-			break;
-		case "3":
-			for (Achat ach:listAchats) {
-				System.out.println(ach.toString());
-			}
-			System.out.println("Taper r pour retour ou entré pour le menu principal. ");
-			String[] listChoixPatron = {"r",""};
-			String b = Controles.validateAnswer(listChoixPatron,sc);
-			switch(b) {
-			case "":
-				Menu.afficheMenu();
-				break;
-			case "r":	
-				afficheMenuAchat(Client, listAchats);
-				break;
-			}
-			break;
-		default:
-			Menu.afficheMenu();			
-			break;
-		}	
-		
-	}
 	
 	public static void afficheMenu() {
 		String a;
@@ -112,7 +60,7 @@ public class Menu {
 			System.out.println("Entrez le nom du fichier à sauvegarder:");
 			nomFichiersauv = sc.nextLine();
 			GestionFichiers.sauvegardeListe(nomFichiersauv);
-			Programme.addTime();				
+			Affiche.addTime();				
 			afficheMenu();
 			break;
 		case "6":
@@ -120,7 +68,7 @@ public class Menu {
 			System.out.println("Entrez le nom du fichier à charger:");
 			nomFichierch = sc.nextLine();
 			GestionFichiers.chargeListe(nomFichierch);
-			Programme.addTime();
+			Affiche.addTime();
 			afficheMenu();
 			break;
 		default:
@@ -146,6 +94,17 @@ public class Menu {
 		List<String> listNClients  = new ArrayList<String>();
 		List<IClient> listClient = new ArrayList<IClient>();
 		String choixMenu3;
+		listPersonne.stream()
+				.filter(p -> p instanceof IClient)
+				.forEach(p -> {
+					IClient f = (IClient) p;
+					if (f.clientOuPas()) {
+						listNClients.add(f.afficheNClient());
+						System.out.print(f.afficheNClient()+" : Type ");
+						System.out.println(f);
+						listClient.add(f);}});
+				
+  		/**
 		for(Personne p:listPersonne) {
 			if (p instanceof IClient) {
 				IClient f = (IClient) p;
@@ -157,6 +116,7 @@ public class Menu {
 				}		
 			}
 		}
+		**/
 		System.out.println("Taper le numéro client pour gérer ses achats, ou r pour retour: ");
 		listNClients.add("r");
 		String[] arrayClient = listNClients.toArray(new String[0]);
@@ -206,7 +166,108 @@ public class Menu {
 		}
 		
 	}
+	public static void afficheMenuAchat(IClient Client, List<Achat> listAchats) {
+		System.out.println("Saisie des achats");
+		System.out.println("----------------------------");		
+		System.out.println("Taper 1: Saisie d'un nouvel achat");
+		System.out.println("Taper 2: Achat des articles");
+		System.out.println("Taper 3: Visulaliser les achats");
+		System.out.println("Taper r: Retour");
+		String[] listString = {"1","2","3","r"};		
+		String a = Controles.validateAnswer(listString,sc);
+		switch(a) {
+		case "1": 
+			Affiche.afficheNouvelAchat(Client,listAchats);
+			break;
+		case "2":
+			Client.achete(listAchats);
+			if (!listAchats.isEmpty()) {
+				System.out.println("Achat réalisé avec succés!");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}	
+				
+			}
+			else System.out.println("Attention aucun achat enregistré.");
+			System.out.println("----------------------------");
+			afficheMenuAchat(Client,listAchats);
+			break;
+		case "3":
+			for (Achat ach:listAchats) {
+				System.out.println(ach.toString());
+			}
+			System.out.println("Taper r pour retour ou entré pour le menu principal. ");
+			String[] listChoixPatron = {"r",""};
+			String b = Controles.validateAnswer(listChoixPatron,sc);
+			switch(b) {
+			case "":
+				Menu.afficheMenu();
+				break;
+			case "r":	
+				afficheMenuAchat(Client, listAchats);
+				break;
+			}
+			break;
+		default:
+			Menu.afficheMenu();			
+			break;
+		}	
+		
+	}
+	public static <T> void afficheMenuAchatOuCommande(Class<T> maclasse, List<T> listAchats,String achatOuCommande) {
+		System.out.println("Saisie des achats");
+		System.out.println("----------------------------");		
+		System.out.println("Taper 1: Saisie d'un nouvel achat");
+		System.out.println("Taper 2: Achat des articles");
+		System.out.println("Taper 3: Visulaliser les achats");
+		System.out.println("Taper r: Retour");
+		String[] listString = {"1","2","3","r"};		
+		String a = Controles.validateAnswer(listString,sc);
+		switch(a) {
+		case "1": 
+			Affiche.afficheNouvelAchat(Client,listAchats);
+			break;
+		case "2":
+			Client.achete(listAchats);
+			if (!listAchats.isEmpty()) {
+				System.out.println("Achat réalisé avec succés!");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}	
+				
+			}
+			else System.out.println("Attention aucun achat enregistré.");
+			System.out.println("----------------------------");
+			afficheMenuAchat(Client,listAchats);
+			break;
+		case "3":
+			for (Achat ach:listAchats) {
+				System.out.println(ach.toString());
+			}
+			System.out.println("Taper r pour retour ou entré pour le menu principal. ");
+			String[] listChoixPatron = {"r",""};
+			String b = Controles.validateAnswer(listChoixPatron,sc);
+			switch(b) {
+			case "":
+				Menu.afficheMenu();
+				break;
+			case "r":	
+				afficheMenuAchat(Client, listAchats);
+				break;
+			}
+			break;
+		default:
+			Menu.afficheMenu();			
+			break;
+		}	
+		
+	}	
 	public static void afficheMenuCommandes(IFournisseur Fournisseur, List<Commande> listCommandes) {
+		
 		System.out.println("Saisie des commandes");
 		System.out.println("----------------------------");
 		
@@ -227,7 +288,7 @@ public class Menu {
 				Fournisseur.livre();
 				System.out.println("Commande réalisée avec succés!");
 				System.out.println("----------------------------");
-				Programme.addTime();	
+				Affiche.addTime();	
 				afficheMenu();
 				
 			}
@@ -261,7 +322,7 @@ public class Menu {
 		}	
 		
 	}
-	
+
 	public static void afficheMenu1() {
 		String choixMenu1;
 		System.out.println("Saisie d'un nouveau profil");
@@ -282,7 +343,7 @@ public class Menu {
 			Personne p = new Salarie(dico); 
 			listPersonne.add(p);
 			System.out.println("Salarié ajouté. \n");
-			Programme.addTime();
+			Affiche.addTime();
 			afficheMenu1();
 			break;
 
@@ -294,7 +355,7 @@ public class Menu {
 			Personne p1 = new Client(dico);
 			listPersonne.add(p1);
 			System.out.println("Client ajouté. \n ");
-			Programme.addTime();
+			Affiche.addTime();
 			afficheMenu1();
 			break;
 		case "f":
@@ -307,7 +368,7 @@ public class Menu {
 			listPersonne.add(p2);
 			System.out.println(p2);
 			System.out.println("Fournisseur ajouté. \n");
-			Programme.addTime();
+			Affiche.addTime();
 			afficheMenu1();
 			break;
 		case "p":
@@ -322,7 +383,7 @@ public class Menu {
 				case "r":
 					GestionsDico.deletePatron();
 					GestionsDico.addPatron(dico);
-					Programme.addTime();
+					Affiche.addTime();
 					afficheMenu1();
 					break;
 					

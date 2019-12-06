@@ -12,7 +12,7 @@ import projetPOO01.saisie.Controles;
 public class Affiche {
 	
 	public static void afficheNouvelleCommande(IFournisseur Fournisseur,List<Commande> listCommandes) {
-		Commande commande = Controles.rentrerCommande(Menu.sc);
+		Commande commande = Controles.rentrerAchatOuCommande(Menu.sc,"commande");
 		listCommandes.add(commande);
 		System.out.println("Taper 1: Nouvelle commande");
 		System.out.println("Taper r: Retour");
@@ -29,7 +29,7 @@ public class Affiche {
 	}
 	
 	public static void afficheNouvelAchat(IClient client,List<Achat> listAchats) {
-		Achat achat = Controles.rentrerAchat(Menu.sc);
+		Achat achat = Controles.rentrerAchatOuCommande(Menu.sc,"achat");
 		listAchats.add(achat);
 		System.out.println("Taper 1: Nouvel achat");
 		System.out.println("Taper r: Retour");
@@ -44,5 +44,11 @@ public class Affiche {
 			break;
 		}	
 	}
-
+	public static void addTime() {
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			System.err.println(e.getMessage());
+		}	
+	}
 }

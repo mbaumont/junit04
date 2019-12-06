@@ -11,6 +11,10 @@ import projetPOO01.GestionPersonnes.Personne;
 import projetPOO01.menu.Menu;
 
 public class GestionFichiers {
+	/**
+	 * 
+	 * @param nomFichier Nom du fichier que l'on va sauvegarder
+	 */
 	public static void sauvegardeListe(String nomFichier) {		
 		try {
 			FileOutputStream fos = new FileOutputStream(nomFichier + ".ser");

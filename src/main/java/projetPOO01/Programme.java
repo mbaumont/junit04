@@ -27,13 +27,6 @@ public class Programme {
 
 	}	
 
-	public static void addTime() {
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			System.err.println(e.getMessage());
-		}	
-	}
-		
+
 	
 }
