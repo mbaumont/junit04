@@ -2,6 +2,7 @@ package projetPOO01.GestionPersonnes;
 
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import projetPOO01.Enumerations.EPersonne;
 import projetPOO01.Exceptions.ErreurSaisie;
@@ -20,7 +21,7 @@ public class Client extends Personne implements IFournisseur, IClient {
 	private List<Commande> listCommandes;
 
 	public Client(String nom, String prenom, String adresse, String ville, String codepostal, String nClient) {
-		super(nom, prenom, adresse, ville, codepostal); // Obligatoire de donner le constructeur si pas de constructeur par défaut 
+		super(nom, prenom, adresse, ville, codepostal); // Obligatoire de donner le constructeur si pas de constructeur par dï¿½faut 
 		this.nClient = nClient;
 		this.nFour = null;
 		this.setListAchats(null);
@@ -34,7 +35,7 @@ public class Client extends Personne implements IFournisseur, IClient {
 		
 	}	
 
-	public Client(Dictionary<EPersonne, String> dico) {
+	public Client(Map<EPersonne, String> dico) {
 		this(dico.get(EPersonne.nom),dico.get(EPersonne.prenom),
 				dico.get(EPersonne.adresse) , dico.get(EPersonne.ville) 
 				, dico.get(EPersonne.codepostal),String.valueOf(dico.get(EPersonne.nClient)),dico.get(EPersonne.nFour));
@@ -72,8 +73,8 @@ public class Client extends Personne implements IFournisseur, IClient {
 
 	@Override
 	public String toString() {
-		if (this.nFour!=null) return super.toString() + ", Numéro Client= "+nFour+ ", Numéro Fournisseur= "+nFour;
-		else return super.toString() + ", Numéro Client= "+nClient;	
+		if (this.nFour!=null) return super.toString() + ", Numï¿½ro Client= "+nFour+ ", Numï¿½ro Fournisseur= "+nFour;
+		else return super.toString() + ", Numï¿½ro Client= "+nClient;	
 	}
 
 
@@ -94,7 +95,7 @@ public class Client extends Personne implements IFournisseur, IClient {
 	public static void testNClient(String nClient,List<String> listNClient) throws ErreurSaisie {
 		for (String c:listNClient) {
 			if (c.equals(nClient)) {
-				throw new ErreurSaisie("Attention le numéro client existe déjà");
+				throw new ErreurSaisie("Attention le numï¿½ro client existe dï¿½jï¿½");
 				}
 			}
 		}

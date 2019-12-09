@@ -1,6 +1,7 @@
 package projetPOO01.GestionPersonnes;
 
 import java.util.Dictionary;
+import java.util.Map;
 
 import projetPOO01.Enumerations.EPersonne;
 
@@ -26,7 +27,7 @@ public class Patron extends Salarie implements IClient, IPatron {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Patron(Dictionary<EPersonne, String> dico) {
+	public Patron(Map<EPersonne, String> dico) {
 		this(dico.get(EPersonne.nom),dico.get(EPersonne.prenom),
 				dico.get(EPersonne.adresse) , dico.get(EPersonne.ville) 
 				, dico.get(EPersonne.codepostal),dico.get(EPersonne.nSecu),

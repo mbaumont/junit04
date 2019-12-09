@@ -34,6 +34,10 @@ public class Menu {
 		System.exit(0);
 	}
 	
+	/**
+	 * Menu principal d'affichage, géré avec une map et des stream suivant le choix d'un numéro
+	 * Chaque numéro lance un autre menu
+	 */
 	public static void afficheMenu() {
 		
 		System.out.println("Menu Principal");
@@ -55,7 +59,11 @@ public class Menu {
 									 .forEach(e->e.getValue().apply());	
 		}
 	}
-
+	
+	/**
+	 * Taper 5:
+	 * Sauvegarde de la liste de personnes rentrées grace à un nom choisi par l'utilisateur (sans l'extension)
+	 */
 	public static void afficheMenu5() {
 		String nomFichiersauv;
 		System.out.println("Entrez le nom du fichier à sauvegarder:");
@@ -64,7 +72,11 @@ public class Menu {
 		Affiche.addTime();				
 		afficheMenu();
 	}
-	
+	/**
+	 * Taper 6:
+	 * Chargement d'un fichier déjà existant composé d'une liste de personne
+	 * L'utilisateur choisi le nom du fichier à charger sans l'extension
+	 */
 	public static void afficheMenu6() {
 		String nomFichierch;
 		System.out.println("Entrez le nom du fichier à charger:");
@@ -74,6 +86,10 @@ public class Menu {
 		afficheMenu();
 	}
 
+	/**
+	 * Taper 2:
+	 * Affiche les valeurs de chaque personne et permet de retourner au menu principal ou quitter
+	 */
 	public static void afficheMenu2() {	
 		for (Personne p:listPersonne) {
 			System.out.println(p);			
@@ -87,6 +103,11 @@ public class Menu {
 		}
 	}
 	
+	/**
+	 * Taper 3:
+	 * Visualisation des différents IClient et choix de celui souhaité pour gérer ses achats
+	 * Possibilité de revenir au menu principal via r
+	 */
 	public static void afficheMenu3() {
 		List<String> listNClients  = new ArrayList<String>();
 		List<IClient> listClient = new ArrayList<IClient>();
@@ -100,20 +121,6 @@ public class Menu {
 						System.out.print(f.afficheNClient()+" : Type ");
 						System.out.println(f);
 						listClient.add(f);}});
-				
-  		/**
-		for(Personne p:listPersonne) {
-			if (p instanceof IClient) {
-				IClient f = (IClient) p;
-				if (f.clientOuPas()) {
-					listNClients.add(f.afficheNClient());
-					System.out.print(f.afficheNClient()+" : Type");
-					System.out.println(f);
-					listClient.add(f);
-				}		
-			}
-		}
-		**/
 		System.out.println("Taper le numéro client pour gérer ses achats, ou r pour retour: ");
 		listNClients.add("r");
 		String[] arrayClient = listNClients.toArray(new String[0]);
@@ -131,6 +138,10 @@ public class Menu {
 		}
 		
 	}
+	/**
+	 * Taper 4:
+	 * Gestion des IFournisseurs et choix d'un IFournisseur
+	 */
 	public static void afficheMenu4() {
 		List<String> listNFournisseur  = new ArrayList<String>();
 		List<IFournisseur> listFournisseur = new ArrayList<IFournisseur>();
@@ -160,16 +171,11 @@ public class Menu {
 		}
 		else {
 			afficheMenu();	
-		}
-		
+		}	
 	}
-	public static void afficheMenuAchat(IClient Client, List<Achat> listAchats) {
-		System.out.println("Saisie des achats");
-		System.out.println("----------------------------");		
-		System.out.println("Taper 1: Saisie d'un nouvel achat");
-		System.out.println("Taper 2: Achat des articles");
-		System.out.println("Taper 3: Visulaliser les achats");
-		System.out.println("Taper r: Retour");
+
+	public static <T> void afficheMenuAchat(IClient Client, List<Achat> listAchats) {
+		Affiche.afficheMenuCommande("achat");
 		String[] listString = {"1","2","3","r"};		
 		String a = Controles.validateAnswer(listString,sc);
 		switch(a) {
@@ -180,11 +186,7 @@ public class Menu {
 			Client.achete(listAchats);
 			if (!listAchats.isEmpty()) {
 				System.out.println("Achat réalisé avec succés!");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}	
+				Affiche.addTime();
 				
 			}
 			else System.out.println("Attention aucun achat enregistré.");
@@ -213,17 +215,14 @@ public class Menu {
 		}	
 		
 	}
-	
+	/**
+	 * 
+	 * @param Fournisseur IFourinsseur
+	 * @param listCommandes liste de commandes du IFournisseur
+	 */
 	public static void afficheMenuCommandes(IFournisseur Fournisseur, List<Commande> listCommandes) {
-		
-		System.out.println("Saisie des commandes");
-		System.out.println("----------------------------");
-		
-		System.out.println("Taper 1: Saisie d'une nouvelle commande");
-		System.out.println("Taper 2: Commande des articles");
-		System.out.println("Taper 3: Visulaliser les commande");
-		System.out.println("Taper r: Retour");
-		String[] listString = {"1","2","3","r"};		
+		Affiche.afficheMenuCommande("commande");
+		String[] listString = {"1","2","3","r"};	
 		String a = Controles.validateAnswer(listString,sc);
 		switch(a) {
 		case "1": 
@@ -237,8 +236,7 @@ public class Menu {
 				System.out.println("Commande réalisée avec succés!");
 				System.out.println("----------------------------");
 				Affiche.addTime();	
-				afficheMenu();
-				
+				afficheMenu();		
 			}
 			else {
 				System.out.println("Attention aucune commande enregistrée.");
@@ -275,15 +273,14 @@ public class Menu {
 	afficheMenu();
 	}	
 	public static void afficheMenu1() {
-		Dictionary<EPersonne, String> dico = new Hashtable<EPersonne, String>();
 		Map<String,iExecute> menu1 = new HashMap<String,iExecute>();
 		System.out.println("Saisie d'un nouveau profil");
 		System.out.println("-----------------------------------------------");	
 		System.out.println("Voulez vous saisir un profil salarié, client, fournisseur ou patron?");
-		menu1.put("Taper s: Pour salarié",()->Affiche.afficheNouvellePersonne("salarié",dico));
-		menu1.put("Taper c: Pour client",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("client",dico));
-		menu1.put("Taper f: Pour fournisseur",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("fournisseur",dico));
-		menu1.put("Taper p: Pour patron",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("patron",dico));
+		menu1.put("Taper s: Pour salarié",()->Affiche.afficheNouvellePersonne("salarié"));
+		menu1.put("Taper c: Pour client",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("client"));
+		menu1.put("Taper f: Pour fournisseur",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("fournisseur"));
+		menu1.put("Taper p: Pour patron",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("patron"));
 		menu1.put("Taper r: Pour retour",()->Menu.retourMenuPrincipal(null,null));
 		menu1.keySet().stream().forEach(System.out::println);
 		String[] listString = {"s","c","f","p","r"};	

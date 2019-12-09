@@ -2,6 +2,7 @@ package projetPOO01.GestionPersonnes;
 
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import projetPOO01.Enumerations.EPersonne;
 import projetPOO01.Exceptions.ErreurSaisie;
@@ -35,7 +36,7 @@ public class Fournisseur extends Personne implements IClient, IFournisseur {
 
 	}
 
-	public Fournisseur(Dictionary<EPersonne, String> dico) {
+	public Fournisseur(Map<EPersonne, String> dico) {
 		this(dico.get(EPersonne.nom),dico.get(EPersonne.prenom),
 				dico.get(EPersonne.adresse) , dico.get(EPersonne.ville) 
 				, dico.get(EPersonne.codepostal),String.valueOf(dico.get(EPersonne.nFour)),
@@ -106,7 +107,7 @@ public class Fournisseur extends Personne implements IClient, IFournisseur {
 	public static void testNFournisseur(String nFournisseur,List<String> listNFournisseur) throws ErreurSaisie {
 		for (String f:listNFournisseur) {
 			if (f.equals(nFournisseur)) {
-				throw new ErreurSaisie("Attention le numéro fournisseur existe déjà");
+				throw new ErreurSaisie("Attention le numï¿½ro fournisseur existe dï¿½jï¿½");
 				}
 			}
 		}
@@ -123,7 +124,7 @@ public class Fournisseur extends Personne implements IClient, IFournisseur {
 	public static void testNFour(String nFour,List<String> listNFour) throws ErreurSaisie {
 		for (String c:listNFour) {
 			if (c.equals(nFour)) {
-				throw new ErreurSaisie("Attention le numéro fournisseur existe déjà");
+				throw new ErreurSaisie("Attention le numï¿½ro fournisseur existe dï¿½jï¿½");
 				}
 			}
 		}

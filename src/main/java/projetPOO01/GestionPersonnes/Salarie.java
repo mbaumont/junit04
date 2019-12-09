@@ -2,6 +2,7 @@ package projetPOO01.GestionPersonnes;
 
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 import projetPOO01.Enumerations.EPersonne;
 import projetPOO01.Exceptions.ErreurSaisie;
@@ -31,7 +32,7 @@ public class Salarie extends Personne implements IClient {
 		this.nClient = nClient;
 		this.setListAchats(null);
 	}
-	public Salarie(Dictionary<EPersonne, String> dico) {
+	public Salarie(Map<EPersonne, String> dico) {
 		this(dico.get(EPersonne.nom),dico.get(EPersonne.prenom),
 				dico.get(EPersonne.adresse) , dico.get(EPersonne.ville) 
 				, dico.get(EPersonne.codepostal),String.valueOf(dico.get(EPersonne.nSecu)),
@@ -66,24 +67,24 @@ public class Salarie extends Personne implements IClient {
 	public String toString() {
 		
 		if (this.nClient!=null) {
-			return super.toString() + ", nSecu= " + nSecu+  ", Salaire= " + salaire+" €"+", nClient="+ nClient;
+			return super.toString() + ", nSecu= " + nSecu+  ", Salaire= " + salaire+" ï¿½"+", nClient="+ nClient;
 		}
 		else {
-			return super.toString() + ", nSecu= " + nSecu+  ", Salaire= " + salaire+" €";
+			return super.toString() + ", nSecu= " + nSecu+  ", Salaire= " + salaire+" ï¿½";
 		}
 	}
 
 	
 	public static void checkSalaire(String salaire) throws ErreurSaisie {
 		if (!salaire.matches("\\d{0,5},\\d{2}")) { 
-			throw new ErreurSaisie("Attention il faut insérer au format XXXX,XX");
+			throw new ErreurSaisie("Attention il faut insï¿½rer au format XXXX,XX");
 		}
 	}
-	// Les mettre dans une autre classe pour plus de lisibilité
+	// Les mettre dans une autre classe pour plus de lisibilitï¿½
 	public static void checknSecu(String nSecu) throws ErreurSaisie {
 		
 		if (!nSecu.matches("\\d{13}")) {
-			throw new ErreurSaisie("Il faut insérer 13 chiffres");		
+			throw new ErreurSaisie("Il faut insï¿½rer 13 chiffres");		
 		}
 	}
 	@Override

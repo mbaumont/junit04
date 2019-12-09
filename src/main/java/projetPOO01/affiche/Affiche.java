@@ -1,7 +1,9 @@
 package projetPOO01.affiche;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import projetPOO01.Enumerations.EPersonne;
 import projetPOO01.GestionMenu.GestionsDico;
@@ -52,11 +54,12 @@ public class Affiche {
 		}	
 	}
 
-	public static void afficheNouvellePersonne(String personne, Dictionary<EPersonne, String> dico) {
+	public static void afficheNouvellePersonne(String personne) {
 		System.out.println("Vous avez choisi le profil "+personne+" .");
 		System.out.println("-----------------------------------------------");
-		GestionsDico.initDicoPersonne(dico, personne.charAt(0));
-		GestionsDico.initToutesPersonne(dico);		
+		Map<EPersonne, String> dico = new Hashtable<EPersonne, String>();
+		System.out.println(personne.charAt(0));
+		dico = GestionsDico.initDicoPersonne(personne.charAt(0));	
 		switch(personne) {
 		case "salarié":
 			Personne p = new Salarie(dico);
@@ -72,7 +75,7 @@ public class Affiche {
 			break;
 		case "patron":
 			if (Menu.Patron) {
-				System.out.println("Attention vous avez déjé ajouté un patron, si vous continuez vous allez le supprimer.\"");
+				System.out.println("Attention vous avez déjà ajouté un patron, si vous continuez vous allez le supprimer.\"");
 				System.out.println("Taper r pour retourner ou c pour continuer:");
 				String[] listChoixPatron = {"r","c"};
 				String b = Controles.validateAnswer(listChoixPatron,Menu.sc);
@@ -101,6 +104,14 @@ public class Affiche {
 		return;
 	}
 	
+	public static void afficheMenuCommande(String CommandeouAchat) {
+		System.out.println("Saisie des "+CommandeouAchat+"s");
+		System.out.println("----------------------------");		
+		System.out.println("Taper 1: Saisie d'une nouvelle "+CommandeouAchat);
+		System.out.println("Taper 2: "+CommandeouAchat+" des articles");
+		System.out.println("Taper 3: Visulaliser les "+CommandeouAchat+"s");
+		System.out.println("Taper r: Retour");	
+	}
 	public static void addTime() {
 		try {
 			Thread.sleep(1000);
