@@ -49,17 +49,21 @@ public static  <T> T rentrerAchatOuCommande(Scanner sc,String achatOuCommande) {
 	
 	public static String validateAnswer(String[] listRep,Scanner sc){
 		String element;
-		element = sc.nextLine();
-		while (testReponse(listRep,element)) {
-			System.out.println("Attention votre réponse est non valable. Taper parmis les choix suivant: "); 
-			for(String e:listRep) { 
-				if (e.equals("")) {
-					System.out.print("Entrer ");
-				}
-				System.out.print(e+" ");
-			}
+		boolean flag = true;
+		do {
 			element = sc.nextLine();
+			if (testReponse(listRep,element)) {
+				System.out.println("Attention votre réponse est non valable. Taper parmis les choix suivant: "); 
+				for(String e:listRep) { 
+					if (e.equals("")) {
+						System.out.print("Entrer ");
+					}
+					System.out.print(e+" ");
+				}		
+			}
+			else flag = false;
 		}
+		while (flag);
 		return element;
 	}
 	

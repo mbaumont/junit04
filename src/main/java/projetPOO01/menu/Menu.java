@@ -1,11 +1,14 @@
 package projetPOO01.menu;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Stream;
 import projetPOO01.Enumerations.EPersonne;
 import projetPOO01.GestionMenu.GestionFichiers;
 import projetPOO01.GestionMenu.GestionsDico;
@@ -25,59 +28,53 @@ public class Menu {
 	public static Scanner sc= null;
 	public static List<Personne> listPersonne = null;
 	public static Boolean Patron = null;
-	
+	private static String choix = null;
+	private static String choixMenu1 = null;
+	public static void quitter(){
+		System.exit(0);
+	}
 	
 	public static void afficheMenu() {
-		String a;
+		
 		System.out.println("Menu Principal");
 		System.out.println("-----------------------------------------------");
 		System.out.println("Bienvenue dans votre gestionnaire de personnel.\n");
-		System.out.println("Taper 1: Saisie d'un nouveau profil");
-		System.out.println("Taper 2: Visualiser les profils existants");
-		System.out.println("Taper 3: Gestion Client ");
-		System.out.println("Taper 4: Gestion Fournisseurs");
-		System.out.println("Taper 5: Sauvegarde du personnel");
-		System.out.println("Taper 6: Chargement du personnel");
-		
-		
-		String[] listString = {"1","2","3","4","5","6"};		
-		a = Controles.validateAnswer(listString,sc);
-		switch(a) {
-		case "1": 
-			Menu.afficheMenu1();
-			break;
-		case "2":
-			Menu.afficheMenu2();
-			break;
-		case "3":
-			afficheMenu3();
-			break;
-		case "4":
-			afficheMenu4();
-			break;
-		case "5":
-			String nomFichiersauv;
-			System.out.println("Entrez le nom du fichier à sauvegarder:");
-			nomFichiersauv = sc.nextLine();
-			GestionFichiers.sauvegardeListe(nomFichiersauv);
-			Affiche.addTime();				
-			afficheMenu();
-			break;
-		case "6":
-			String nomFichierch;
-			System.out.println("Entrez le nom du fichier à charger:");
-			nomFichierch = sc.nextLine();
-			GestionFichiers.chargeListe(nomFichierch);
-			Affiche.addTime();
-			afficheMenu();
-			break;
-		default:
-			afficheMenu();			
-			break;
-		}	
+		Map<String,iExecute> menu0 = new HashMap<String,iExecute>();
+		menu0.put("Taper 1: Saisie d'un nouveau profil",Menu::afficheMenu1);
+		menu0.put("Taper 2: Visualiser les profils existants",Menu::afficheMenu2);
+		menu0.put("Taper 3: Gestion Client ",Menu::afficheMenu3);
+		menu0.put("Taper 4: Gestion Fournisseurs",Menu::afficheMenu4);
+		menu0.put("Taper 5: Sauvegarde du personnel",Menu::afficheMenu5);
+		menu0.put("Taper 6: Chargement du personnel",Menu::afficheMenu6);
+		menu0.put("Taper 7: Quitter",Menu::quitter);
+		menu0.keySet().stream().sorted().forEach(System.out::println);
+		String[] listString = {"1","2","3","4","5","6","7"};	
+		while(true) {
+			choix = Controles.validateAnswer(listString,sc);
+			menu0.entrySet().stream().filter(e->e.getKey().charAt(6) == choix.charAt(0))
+									 .forEach(e->e.getValue().apply());	
+		}
+	}
+
+	public static void afficheMenu5() {
+		String nomFichiersauv;
+		System.out.println("Entrez le nom du fichier à sauvegarder:");
+		nomFichiersauv = sc.nextLine();
+		GestionFichiers.sauvegardeListe(nomFichiersauv);
+		Affiche.addTime();				
+		afficheMenu();
 	}
 	
-	public static void afficheMenu2() {
+	public static void afficheMenu6() {
+		String nomFichierch;
+		System.out.println("Entrez le nom du fichier à charger:");
+		nomFichierch = sc.nextLine();
+		GestionFichiers.chargeListe(nomFichierch);
+		Affiche.addTime();
+		afficheMenu();
+	}
+
+	public static void afficheMenu2() {	
 		for (Personne p:listPersonne) {
 			System.out.println(p);			
 		}	
@@ -216,56 +213,7 @@ public class Menu {
 		}	
 		
 	}
-	public static <T> void afficheMenuAchatOuCommande(Class<T> maclasse, List<T> listAchats,String achatOuCommande) {
-		System.out.println("Saisie des achats");
-		System.out.println("----------------------------");		
-		System.out.println("Taper 1: Saisie d'un nouvel achat");
-		System.out.println("Taper 2: Achat des articles");
-		System.out.println("Taper 3: Visulaliser les achats");
-		System.out.println("Taper r: Retour");
-		String[] listString = {"1","2","3","r"};		
-		String a = Controles.validateAnswer(listString,sc);
-		switch(a) {
-		case "1": 
-			Affiche.afficheNouvelAchat(Client,listAchats);
-			break;
-		case "2":
-			Client.achete(listAchats);
-			if (!listAchats.isEmpty()) {
-				System.out.println("Achat réalisé avec succés!");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}	
-				
-			}
-			else System.out.println("Attention aucun achat enregistré.");
-			System.out.println("----------------------------");
-			afficheMenuAchat(Client,listAchats);
-			break;
-		case "3":
-			for (Achat ach:listAchats) {
-				System.out.println(ach.toString());
-			}
-			System.out.println("Taper r pour retour ou entré pour le menu principal. ");
-			String[] listChoixPatron = {"r",""};
-			String b = Controles.validateAnswer(listChoixPatron,sc);
-			switch(b) {
-			case "":
-				Menu.afficheMenu();
-				break;
-			case "r":	
-				afficheMenuAchat(Client, listAchats);
-				break;
-			}
-			break;
-		default:
-			Menu.afficheMenu();			
-			break;
-		}	
-		
-	}	
+	
 	public static void afficheMenuCommandes(IFournisseur Fournisseur, List<Commande> listCommandes) {
 		
 		System.out.println("Saisie des commandes");
@@ -322,91 +270,29 @@ public class Menu {
 		}	
 		
 	}
-
+	public static void retourMenuPrincipal(Object object, Object object2) {
+	System.out.println("Retour au menu principal !");
+	afficheMenu();
+	}	
 	public static void afficheMenu1() {
-		String choixMenu1;
+		Dictionary<EPersonne, String> dico = new Hashtable<EPersonne, String>();
+		Map<String,iExecute> menu1 = new HashMap<String,iExecute>();
 		System.out.println("Saisie d'un nouveau profil");
-		System.out.println("-----------------------------------------------");
+		System.out.println("-----------------------------------------------");	
 		System.out.println("Voulez vous saisir un profil salarié, client, fournisseur ou patron?");
-		System.out.println("Taper s pour salarié, c pour client, f pour fournisseur, p pour patron ou r pour retourner au menu princpal: \n ");
-		String[] listString = {"s","c","f","p","r"};
-		choixMenu1 = Controles.validateAnswer(listString,sc);
-
-		Dictionary<EPersonne, String> dico = new Hashtable<EPersonne, String>();		
-		switch(choixMenu1) {
-		case "s": 
-			System.out.println("Vous avez choisi le profil salarié.");
-			System.out.println("-----------------------------------------------");
-			GestionsDico.initDicoPersonne(dico, choixMenu1);
-			GestionsDico.initToutesPersonne(dico);		
-
-			Personne p = new Salarie(dico); 
-			listPersonne.add(p);
-			System.out.println("Salarié ajouté. \n");
-			Affiche.addTime();
-			afficheMenu1();
-			break;
-
-		case "c":
-			System.out.println("Vous avez choisi le profil client.");
-			System.out.println("-----------------------------------------------");
-			GestionsDico.initDicoPersonne(dico, choixMenu1);
-			GestionsDico.initToutesPersonne(dico);		
-			Personne p1 = new Client(dico);
-			listPersonne.add(p1);
-			System.out.println("Client ajouté. \n ");
-			Affiche.addTime();
-			afficheMenu1();
-			break;
-		case "f":
-			System.out.println("Vous avez choisi le profil fournisseur.");
-			System.out.println("----------------------------------------------- \n");
-			GestionsDico.initDicoPersonne(dico, choixMenu1);			
-			GestionsDico.initToutesPersonne(dico);
-			Personne p2 = new Fournisseur(dico);
-			System.out.println(dico);
-			listPersonne.add(p2);
-			System.out.println(p2);
-			System.out.println("Fournisseur ajouté. \n");
-			Affiche.addTime();
-			afficheMenu1();
-			break;
-		case "p":
-			System.out.println("Vous avez choisi le profil patron.");
-			System.out.println("----------------------------------------------- \n");
-			if (Patron) {
-				System.out.println("Attention vous avez déjé ajouté un patron, si vous continuez vous allez le supprimer.\"");
-				System.out.println("Taper r pour retourner ou c pour continuer:");
-				String[] listChoixPatron = {"r","c"};
-				String b = Controles.validateAnswer(listChoixPatron,sc);
-				switch(b) {
-				case "r":
-					GestionsDico.deletePatron();
-					GestionsDico.addPatron(dico);
-					Affiche.addTime();
-					afficheMenu1();
-					break;
-					
-				case "c":
-					afficheMenu();
-					break;
-				default:
-					break;
-				}		
-				break;
-			}
-			else {
-				GestionsDico.addPatron(dico);
-				System.out.println("Patron ajouté, retour au menu principal. \n ");		
-				afficheMenu1();
-				break;
-			}
-			
-		case "r":
-			System.out.println("Retour au menu principal !");
-			afficheMenu();
-			break;	
-		}				
+		menu1.put("Taper s: Pour salarié",()->Affiche.afficheNouvellePersonne("salarié",dico));
+		menu1.put("Taper c: Pour client",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("client",dico));
+		menu1.put("Taper f: Pour fournisseur",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("fournisseur",dico));
+		menu1.put("Taper p: Pour patron",()->projetPOO01.affiche.Affiche.afficheNouvellePersonne("patron",dico));
+		menu1.put("Taper r: Pour retour",()->Menu.retourMenuPrincipal(null,null));
+		menu1.keySet().stream().forEach(System.out::println);
+		String[] listString = {"s","c","f","p","r"};	
+		while(true) {
+			choixMenu1 = Controles.validateAnswer(listString,sc);
+			menu1.entrySet().stream().filter(e->e.getKey().charAt(6) == choixMenu1.charAt(0))
+									 .forEach(e->e.getValue().apply());	
+		}
 	}
+
 
 }

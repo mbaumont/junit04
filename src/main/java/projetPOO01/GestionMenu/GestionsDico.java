@@ -16,28 +16,28 @@ import projetPOO01.menu.Menu;
 
 public class GestionsDico {
 	
-	public static void initDicoPersonne(Dictionary<EPersonne, String> dico, String typePersonne){
+	public static void initDicoPersonne(Dictionary<EPersonne, String> dico, char typePersonne){
 		dico.put(EPersonne.nom,"Saisie du nom : ");
 		dico.put(EPersonne.prenom,"Saisie du prénom : ");
 		dico.put(EPersonne.adresse,"Saisie de l'adresse : ");
 		dico.put(EPersonne.ville,"Saisie de la ville : ");
 		dico.put(EPersonne.codepostal,"Saisie du code postal : ");
 		switch(typePersonne) {
-		case "s":
+		case 's':
 			dico.put(EPersonne.salaire,"Saisie du salaire au format: XXXX,XX");
 			dico.put(EPersonne.nSecu,"Saisie du numéro de sécurité social : ");
 			dico.put(EPersonne.clientOuPas,"Etes vous client (oui/non): ");
 			break;
-		case "p":
+		case 'p':
 			dico.put(EPersonne.salaire,"Saisie du salaire au format: XXXX,XX");
 			dico.put(EPersonne.nSecu,"Saisie du numéro de sécurité social : ");
 			dico.put(EPersonne.clientOuPas,"Etes vous client (oui/non): ");
 			break;		
-		case "c":
+		case 'c':
 			dico.put(EPersonne.nClient,"Saisie du num�ro Client (attention un numéro par client) : ");
 			dico.put(EPersonne.fournisseurOuPas,"Etes vous également fournisseur (oui/non): ");
 			break;
-		case "f":
+		case 'f':
 			dico.put(EPersonne.nFour,"Saisie du numéro Fournisseur (attention un numéro par fournisseur) : ");
 			dico.put(EPersonne.clientOuPas,"Etes vous client (oui/non): ");
 			
@@ -45,8 +45,9 @@ public class GestionsDico {
 		}
 	}
 
+	
 	public static void addPatron(Dictionary<EPersonne, String> dico) {
-		initDicoPersonne(dico, "p");
+		initDicoPersonne(dico, 'p');
 		initToutesPersonne(dico);
 		Personne p3 = new Patron(dico);
 		Menu.Patron = true;
@@ -70,13 +71,14 @@ public class GestionsDico {
 			Dictionary<EPersonne, String> dico2 = (Dictionary<EPersonne, String>) ((Hashtable<EPersonne, String>)dico).clone();	
 			Enumeration<EPersonne> k; 
 			k = dico2.keys();
+			String saisie;
 			while (continueornot) {				 
 				EPersonne ep = k.nextElement();
 				System.out.println(dico2.get(ep));		
 				erreursaisie = true;
 				while(erreursaisie) {
 	       	 		try {
-	            		 String saisie= Menu.sc.nextLine();
+	            		 saisie= Menu.sc.nextLine();
 	            		 switch(ep){
 	            		 case clientOuPas: 
 	            			 Personne.checkOuiNon(saisie);
